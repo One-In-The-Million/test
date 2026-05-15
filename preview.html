@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Belajar A-Z</title>
+  <title>Learn A-Z</title>
 
   <style>
+
     *{
       margin:0;
       padding:0;
@@ -17,6 +18,12 @@
     body{
       background: linear-gradient(to right, #4facfe, #00f2fe);
       min-height:100vh;
+    }
+
+    /* SEMUA HALAMAN */
+    .page{
+      display:none;
+      padding:30px;
     }
 
     /* HALAMAN HOME */
@@ -40,6 +47,7 @@
       margin-bottom:30px;
     }
 
+    /* BUTTON */
     .btn{
       padding:15px 30px;
       border:none;
@@ -48,8 +56,9 @@
       color:#0077ff;
       font-size:18px;
       cursor:pointer;
-      transition:0.3s;
+      margin:10px;
       font-weight:bold;
+      transition:0.3s;
     }
 
     .btn:hover{
@@ -57,16 +66,10 @@
     }
 
     /* HALAMAN BELAJAR */
-    #learnPage{
-      display:none;
-      padding:30px;
-    }
-
     #learnPage h1{
       text-align:center;
       color:white;
       margin-bottom:30px;
-      font-size:40px;
     }
 
     .grid{
@@ -81,23 +84,17 @@
       border-radius:15px;
       text-align:center;
       box-shadow:0 5px 10px rgba(0,0,0,0.2);
-      transition:0.3s;
-    }
-
-    .card:hover{
-      transform:translateY(-5px);
     }
 
     .letter{
       font-size:60px;
-      font-weight:bold;
       color:#0077ff;
+      font-weight:bold;
     }
 
     .word{
       font-size:22px;
       margin:10px 0;
-      color:#444;
     }
 
     .speakBtn{
@@ -109,29 +106,105 @@
       cursor:pointer;
     }
 
-    .speakBtn:hover{
-      background:#005fd1;
+    /* HALAMAN QUIZ */
+    #quizPage{
+      text-align:center;
+      color:white;
+      padding-top:100px;
     }
+
+    #quizLetter{
+      font-size:120px;
+      margin:30px 0;
+      font-weight:bold;
+    }
+
+    #answerInput{
+      padding:15px;
+      width:250px;
+      border:none;
+      border-radius:10px;
+      font-size:20px;
+      text-align:center;
+    }
+
+    #result{
+      margin-top:20px;
+      font-size:28px;
+      font-weight:bold;
+    }
+
+    #score{
+      margin-top:20px;
+      font-size:24px;
+    }
+
   </style>
 </head>
 <body>
 
-  <!-- HALAMAN HOME -->
+  <!-- HALAMAN BERANDA -->
   <div id="homePage">
-    <h1>Learn A - Z</h1>
-    <p>Belajar huruf A sampai Z dalam bahasa Inggris</p>
 
-    <button class="btn" onclick="startLearning()">
-      Mulai Belajar
+    <h1>Learn A-Z</h1>
+
+    <p>Belajar dan Quiz Huruf Bahasa Inggris</p>
+
+    <button class="btn" onclick="showPage('learnPage')">
+      📚 Mulai Belajar
     </button>
+
+    <button class="btn" onclick="startQuiz()">
+      🎮 Quiz Tebak Huruf
+    </button>
+
   </div>
 
   <!-- HALAMAN BELAJAR -->
-  <div id="learnPage">
+  <div id="learnPage" class="page">
 
-    <h1>Alphabet A - Z</h1>
+    <h1>Alphabet A-Z</h1>
+
+    <button class="btn"
+      onclick="showPage('homePage')">
+      ⬅ Kembali
+    </button>
+
+    <br><br>
 
     <div class="grid" id="alphabetContainer"></div>
+
+  </div>
+
+  <!-- HALAMAN QUIZ -->
+  <div id="quizPage" class="page">
+
+    <h1>Quiz Tebak Huruf</h1>
+
+    <button class="btn"
+      onclick="showPage('homePage')">
+      ⬅ Kembali
+    </button>
+
+    <div id="quizLetter">A</div>
+
+    <input
+      type="text"
+      id="answerInput"
+      placeholder="Masukkan jawaban..."
+    >
+
+    <br><br>
+
+    <button class="btn" onclick="checkAnswer()">
+      Jawab
+    </button>
+
+    <div id="result"></div>
+
+    <div id="score">
+      Score: <span id="scoreValue">0</span>
+    </div>
 
   </div>
 
@@ -167,13 +240,17 @@
       ["Z","Zebra"]
     ];
 
-    // PINDAH KE HALAMAN BELAJAR
-    function startLearning(){
+    // TAMPILKAN HALAMAN
+    function showPage(pageId){
+
       document.getElementById("homePage").style.display = "none";
-      document.getElementById("learnPage").style.display = "block";
+      document.getElementById("learnPage").style.display = "none";
+      document.getElementById("quizPage").style.display = "none";
+
+      document.getElementById(pageId).style.display = "block";
     }
 
-    // MENAMPILKAN HURUF A-Z
+    // MEMBUAT KARTU HURUF
     const container =
       document.getElementById("alphabetContainer");
 
@@ -184,30 +261,124 @@
 
       container.innerHTML += `
         <div class="card">
+
           <div class="letter">${letter}</div>
+
           <div class="word">${word}</div>
 
-          <button class="speakBtn"
+          <button
+            class="speakBtn"
             onclick="speak('${letter}','${word}')">
+
             🔊 Speak
+
           </button>
+
         </div>
       `;
     });
 
-    // FUNGSI SUARA
+    // SUARA
     function speak(letter, word){
 
-      const text =
-        letter + " for " + word;
-
       const speech =
-        new SpeechSynthesisUtterance(text);
+        new SpeechSynthesisUtterance(
+          letter + " for " + word
+        );
 
       speech.lang = "en-US";
 
       window.speechSynthesis.speak(speech);
     }
+
+  // ================= QUIZ =================
+
+  let currentAnswer = "";
+  let correct = 0;
+  let wrong = 0;
+
+  // MULAI QUIZ
+  function startQuiz(){
+
+    showPage("quizPage");
+
+    nextQuestion();
+  }
+
+  // PERTANYAAN BARU
+  function nextQuestion(){
+
+    const random =
+      Math.floor(Math.random() * alphabet.length);
+
+    const letter = alphabet[random][0];
+    const word = alphabet[random][1];
+
+    document.getElementById("quizLetter")
+      .innerText = letter;
+
+    currentAnswer = word.toLowerCase();
+
+    document.getElementById("answerInput")
+      .value = "";
+
+    document.getElementById("result")
+      .innerText = "";
+
+    document.getElementById("correctAnswer")
+      .innerText = "";
+  }
+
+  // CEK JAWABAN
+  function checkAnswer(){
+
+    const userAnswer =
+      document.getElementById("answerInput")
+      .value
+      .toLowerCase();
+
+    // JIKA BENAR
+    if(userAnswer === currentAnswer){
+
+      document.getElementById("result")
+        .innerHTML =
+        "✅ Jawaban Benar!";
+
+      document.getElementById("result")
+        .style.color = "lime";
+
+      correct++;
+
+      document.getElementById("correctScore")
+        .innerText = correct;
+
+    }
+
+    // JIKA SALAH
+    else{
+
+      document.getElementById("result")
+        .innerHTML =
+        "❌ Jawaban Salah!";
+
+      document.getElementById("result")
+        .style.color = "yellow";
+
+      document.getElementById("correctAnswer")
+        .innerHTML =
+        "Jawaban yang benar adalah: <b>"
+        + currentAnswer +
+        "</b>";
+
+      wrong++;
+
+      document.getElementById("wrongScore")
+        .innerText = wrong;
+    }
+
+    // SOAL BERIKUTNYA
+    setTimeout(nextQuestion, 2000);
+  }
 
   </script>
 
