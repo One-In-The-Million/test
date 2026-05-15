@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Belajar A-Z</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      min-height:100vh;
+    }
+
+    /* HALAMAN HOME */
+    #homePage{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      text-align:center;
+      color:white;
+    }
+
+    #homePage h1{
+      font-size:60px;
+      margin-bottom:20px;
+    }
+
+    #homePage p{
+      font-size:20px;
+      margin-bottom:30px;
+    }
+
+    .btn{
+      padding:15px 30px;
+      border:none;
+      border-radius:10px;
+      background:white;
+      color:#0077ff;
+      font-size:18px;
+      cursor:pointer;
+      transition:0.3s;
+      font-weight:bold;
+    }
+
+    .btn:hover{
+      transform:scale(1.05);
+    }
+
+    /* HALAMAN BELAJAR */
+    #learnPage{
+      display:none;
+      padding:30px;
+    }
+
+    #learnPage h1{
+      text-align:center;
+      color:white;
+      margin-bottom:30px;
+      font-size:40px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+      gap:20px;
+    }
+
+    .card{
+      background:white;
+      padding:20px;
+      border-radius:15px;
+      text-align:center;
+      box-shadow:0 5px 10px rgba(0,0,0,0.2);
+      transition:0.3s;
+    }
+
+    .card:hover{
+      transform:translateY(-5px);
+    }
+
+    .letter{
+      font-size:60px;
+      font-weight:bold;
+      color:#0077ff;
+    }
+
+    .word{
+      font-size:22px;
+      margin:10px 0;
+      color:#444;
+    }
+
+    .speakBtn{
+      padding:10px 20px;
+      border:none;
+      border-radius:8px;
+      background:#0077ff;
+      color:white;
+      cursor:pointer;
+    }
+
+    .speakBtn:hover{
+      background:#005fd1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HALAMAN HOME -->
+  <div id="homePage">
+    <h1>Learn A - Z</h1>
+    <p>Belajar huruf A sampai Z dalam bahasa Inggris</p>
+
+    <button class="btn" onclick="startLearning()">
+      Mulai Belajar
+    </button>
+  </div>
+
+  <!-- HALAMAN BELAJAR -->
+  <div id="learnPage">
+
+    <h1>Alphabet A - Z</h1>
+
+    <div class="grid" id="alphabetContainer"></div>
+
+  </div>
+
+  <script>
+
+    // DATA HURUF
+    const alphabet = [
+      ["A","Apple"],
+      ["B","Ball"],
+      ["C","Cat"],
+      ["D","Dog"],
+      ["E","Elephant"],
+      ["F","Fish"],
+      ["G","Goat"],
+      ["H","Hat"],
+      ["I","Ice Cream"],
+      ["J","Juice"],
+      ["K","Kite"],
+      ["L","Lion"],
+      ["M","Monkey"],
+      ["N","Nest"],
+      ["O","Orange"],
+      ["P","Pencil"],
+      ["Q","Queen"],
+      ["R","Rabbit"],
+      ["S","Sun"],
+      ["T","Tiger"],
+      ["U","Umbrella"],
+      ["V","Van"],
+      ["W","Water"],
+      ["X","Xylophone"],
+      ["Y","Yo-yo"],
+      ["Z","Zebra"]
+    ];
+
+    // PINDAH KE HALAMAN BELAJAR
+    function startLearning(){
+      document.getElementById("homePage").style.display = "none";
+      document.getElementById("learnPage").style.display = "block";
+    }
+
+    // MENAMPILKAN HURUF A-Z
+    const container =
+      document.getElementById("alphabetContainer");
+
+    alphabet.forEach(item => {
+
+      const letter = item[0];
+      const word = item[1];
+
+      container.innerHTML += `
+        <div class="card">
+          <div class="letter">${letter}</div>
+          <div class="word">${word}</div>
+
+          <button class="speakBtn"
+            onclick="speak('${letter}','${word}')">
+            🔊 Speak
+          </button>
+        </div>
+      `;
+    });
+
+    // FUNGSI SUARA
+    function speak(letter, word){
+
+      const text =
+        letter + " for " + word;
+
+      const speech =
+        new SpeechSynthesisUtterance(text);
+
+      speech.lang = "en-US";
+
+      window.speechSynthesis.speak(speech);
+    }
+
+  </script>
+
+</body>
+</html>
